@@ -35,11 +35,7 @@ const createTask = async (req, res) => {
 const updateTask = async (req, res) => {
   const { id } = req.params;
 
-  tasks = tasks.map((task) =>
-    task._id === id
-      ? { ...task, completed: !task.completed }
-      : task
-  );
+  tasks = tasks.map((task) => (task._id === id ? { ...task, completed: !task.completed } : task));
 
   const updatedTask = tasks.find((task) => task._id === id);
 

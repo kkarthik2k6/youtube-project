@@ -23,12 +23,12 @@ app.get('/health', (req, res) => {
 
 // Error middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error(err.stack, next);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
 // 404
-app.use('*', (req, res) => {
+            app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
