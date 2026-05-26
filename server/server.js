@@ -1,10 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const taskRoutes = require('./routes/tasks');
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -18,42 +16,29 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/tasks', taskRoutes);
 
-// Health check endpoint
+// Health route
 app.get('/health', (req, res) => {
   res.status(200).json({ message: 'Server is running!' });
 });
 
-// Error handling middleware
+// Error middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack, next);
+  console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// 404 handler
+// 404
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Database connection
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Database connection error:', error);
-    process.exit(1);
-  });
+// Start server directly WITHOUT MongoDB
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...');
-  await mongoose.connection.close();
   process.exit(0);
 });

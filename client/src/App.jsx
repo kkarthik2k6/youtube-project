@@ -22,7 +22,7 @@ function App() {
       setLoading(true);
       setError(null);
       const response = await taskService.getAllTasks();
-      setTasks(response.data);
+      setTasks(response);
     } catch (err) {
       setError('Failed to fetch tasks. Please try again.');
       console.error('Error fetching tasks:', err);
@@ -34,7 +34,7 @@ function App() {
   const handleAddTask = async (taskData) => {
     try {
       const response = await taskService.createTask(taskData);
-      setTasks((prevTasks) => [response.data, ...prevTasks]);
+      setTasks((prevTasks) => [response, ...prevTasks]);
       setIsDialogOpen(false);
       return { success: true };
     } catch (err) {
